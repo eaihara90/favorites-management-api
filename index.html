@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NetFreeLix</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: 62.5%;
+    }
+
+    body {
+      background-color: #333;
+      font-size: 1.6rem;
+      height: 100vh;
+    }
+
+    .movies-list {
+      align-items: center;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      list-style-type: none;
+    }
+
+    .movie-link {
+      align-items: center;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      height: 26.8rem;
+      width: 40rem;
+    }
+
+    .movie-cover {
+      border-radius: 8px;
+      display: block;
+      object-fit: contain;
+      width: 100%;
+    }
+
+    .movie-title {
+      color: white;
+      display: block;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow: hidden;
+      text-wrap: nowrap;
+      text-overflow: ellipsis;
+      width: 80%;
+    }
+
+
+    .video-wrapper {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      height: 100%;
+      width: 100%;
+    }
+    
+    #video-player {
+      height: 98%;
+      /* width: 1280px;
+      height: 720px; */
+    }
+  </style>
+<body>
+  <ul class="movies-list">
+
+  </ul>
+  <div class="video-wrapper">
+    <video id="video-player" controls muted="muted">
+      <source type="video/mp4" />
+    </video>
+  </div>
+
+  <script>
+    const randomIndex = Math.floor(Math.random() * ((38 - 1) - 0) + 0);
+    const source = document.querySelector('source');
+    source.src = `http://localhost:3005/api/movie-stream/${randomIndex}`;
+    loadVideos();
+
+    function loadVideos() {
+      fetch(`http://localhost:3005/api/movies`)
+      .then(_response => _response.json())
+      .then(_response => {
+        const movies = document.querySelector('.movies-list');
+      
+        for (let item of _response.movies) {
+          const liNode = document.createElement('li');
+          const aNode = document.createElement('a');
+          const imgNode = document.createElement('img');
+          const spanNode = document.createElement('span');
+          
+          aNode.href = item.coverUrl
+          imgNode.src = item.coverUrl;
+          spanNode.innerText = item.title;
+
+          liNode.classList.add('movie-item');
+          aNode.classList.add('movie-link');
+          imgNode.classList.add('movie-cover');
+          spanNode.classList.add('movie-title');
+
+          aNode.insertAdjacentElement('beforeend', imgNode);
+          aNode.insertAdjacentElement('beforeend', spanNode);
+          liNode.insertAdjacentElement('beforeend', aNode);
+          movies.insertAdjacentElement('beforeend', liNode);
+        }
+      });
+    }
+  </script>
+</body>
+</html>
