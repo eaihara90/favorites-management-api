@@ -33,6 +33,17 @@ export default class FilesController {
     }
   }
 
+  @route('/folder/:folderId')
+  @GET()
+  public async getFilesByFolderId(req: Request, res: Response): Promise<void> {
+    try {
+      const files = await this.filesService.findByFolderId(req.params.folderId);
+      res.status(200).json({ files });
+    } catch (error) {
+      res.status(500).send('Internal server error');
+    }
+  }
+
   @route('')
   @POST()
   public async save(req: Request, res: Response): Promise<void> {

@@ -32,6 +32,20 @@ export default class FilesService {
     }
   }
 
+  public async findByFolderId(folderId: string): Promise<any> {
+    try {
+      const response = await this.filesRepository.findByFolderId(folderId);
+      
+      if (!response) {
+        throw new ErrorMessage('Movie not found', 404);
+      }
+
+      return response;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   public async save(model: any): Promise<any> {
     try {
       const response = await this.filesRepository.save(model);

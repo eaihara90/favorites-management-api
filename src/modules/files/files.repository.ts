@@ -19,6 +19,14 @@ export default class FilesRepository {
     }
   }
 
+  public async findByFolderId(folderId: string): Promise<(Document<unknown, {}, FileModel>[]) | null> {
+    try {
+      return FileSchema.find({ parentId: folderId }).exec();
+    } catch (error) {
+      throw new Error("Method not implemented.");
+    }
+  }
+
   public async save(movie: any): Promise<(Document<unknown, {}, FileModel>)> {
     try {
       return FileSchema.create(movie);
